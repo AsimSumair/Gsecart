@@ -1,0 +1,26 @@
+version: '3'
+services:
+  backend:
+    build: .
+    container_name: fastapi-backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=sqlite:///./grecart_db.db
+    depends_on: []
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    command: streamlit run ui.py
+
+volumes:
+  db_data:
